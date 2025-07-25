@@ -29,10 +29,14 @@ client.on('guildMemberAdd', async (member) => {
     const channel = member.guild.channels.cache.get(WELCOME_CHANNEL_ID);
     if (!channel) return;
 
-    const welcomeMessage = `Welcome to Tempo, ${member}`;
-    const welcomeGif = './assets/gif/Welcome.gif';
+    const { AttachmentBuilder } = require('discord.js');
+    const path = require('path');
 
-    await channel.send({ content: `${welcomeMessage}\n${welcomeGif}` });
+    const welcomeMessage = `Welcome to Tempo, ${member}`;
+    const gifPath = path.join(__dirname, 'assets/gif/Welcome.gif');
+    const gifAttachment = new AttachmentBuilder(gifPath);
+
+    await channel.send({ content: welcomeMessage, files: [gifAttachment] });
 
   } catch (error) {
     console.error('Error welcoming member:', error);
