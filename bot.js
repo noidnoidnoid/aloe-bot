@@ -37,6 +37,7 @@ client.on('guildMemberAdd', async (member) => {
     const gifAttachment = new AttachmentBuilder(gifPath);
 
     await channel.send({ content: welcomeMessage, files: [gifAttachment] });
+    console.log(`Sent welcome message to ${member.user.tag}`);
 
   } catch (error) {
     console.error('Error welcoming member:', error);
