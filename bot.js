@@ -30,9 +30,9 @@ client.on('guildMemberAdd', async (member) => {
     if (!channel) return;
 
     const welcomeMessage = `Welcome to Tempo, ${member}.`;
-    const gifUrl = 'https://i.imgur.com/GHyd8Vm.gif';
+    const welcomeGif = './assets/gif/Welcome.gif';
 
-    await channel.send({ content: `${welcomeMessage}\n${gifUrl}` });
+    await channel.send({ content: `${welcomeMessage}\n${welcomeGif}` });
 
   } catch (error) {
     console.error('Error welcoming member:', error);
