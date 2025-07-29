@@ -7,7 +7,6 @@ const client = new Client({
 });
 
 const WELCOME_CHANNEL_ID = '1397782920982433873';
-
 const AUTO_ROLE_NAME = 'afantasic';
 
 client.once('ready', () => {
@@ -16,7 +15,19 @@ client.once('ready', () => {
 
 client.on('guildMemberAdd', async (member) => {
   try {
-    // Assign the role
+    const suspiciousName = member.user.username.toLowerCase().includes('announcements');
+    const suspiciousDiscriminator = member.user.discriminator === '0000'; // exemplo comum de bot
+    const accountAgeInDays = (Date.now() - member.user.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+    const recentlyCreated = accountAgeInDays < 1; // menos de 1 dia de existência
+
+    if (suspiciousName || suspiciousDiscriminator || recentlyCreated) {
+      console.log(`⚠️ Banning suspicious account: ${member.user.tag}`);
+
+      await member.ban({ reason: 'Automatic anti-spam: username or account age suspicious.' });
+      return;
+    }
+
+    // Assign role
     const role = member.guild.roles.cache.find(r => r.name === AUTO_ROLE_NAME);
     if (role) {
       await member.roles.add(role);
@@ -40,7 +51,7 @@ client.on('guildMemberAdd', async (member) => {
     console.log(`Sent welcome message to ${member.user.tag}`);
 
   } catch (error) {
-    console.error('Error welcoming member:', error);
+    console.error('Error in guildMemberAdd:', error);
   }
 });
 
